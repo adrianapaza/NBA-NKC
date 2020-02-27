@@ -133,6 +133,7 @@ def Get_Landscape_Fitness(Landscape,Position):
 FITNESS MAPPING
 
 Calculates the fitness for all positions in the landscape and returns them in a DataFrame
+This is used in later functions
 """
 def Fitness_Mapping(Landscape):
     #Get N and K
@@ -152,6 +153,105 @@ def Fitness_Mapping(Landscape):
     All_Fitness_Data_Frame.loc[:,'Location'] = all_permutations
 
     return All_Fitness_Data_Frame
+"""
+SEARCH ALGORITHMS
+
+Hill Climb will take a given position then look at neighbors to find next highest one if not at maxima.
+#One finds the maxima of all your neighobrs when taking a step, and the other finds the first highest neighbor.
+
+"""
+def Hill_Climb_To_Max(Position,df, M):
+    #Loops until you reach a maxima
+    while df.loc[str(Position)].Maxima==0:
+
+        #Identify the Neighbors (distance of M from initial position row)
+        Neighbors = df[df['Location'].apply(lambda row : sum(abs(np.array(row)-np.array(df.loc[str(Position)].Location)))==M)]        #Get the maximum fitness value of the neighbors
+
+        Neighbors_Max = max(Neighbors.Fitness) #fitness is indexed at 0 here for some reason
+            ##Find the highest neighbor, then go to it
+        if Neighbors_Max > df.loc[str(Position)].Fitness: #fitness is indexed at 1 here for some reason
+            Position = Neighbors['Fitness'].idxmax()
+
+    return Position
+
+def Hill_Climb_First(Position,df, M):
+        #Loops until you reach a maxima
+    while df.loc[str(Position)].Maxima==0:
+
+        #Identify the Neighbors (distance of M from initial position row)
+        Neighbors = df[df['Location'].apply(lambda row : sum(abs(np.array(row)-np.array(df.loc[str(Position)].Location)))==M)]        #Get the maximum fitness value of the neighbors
+
+        BetterNeighbors = Neighbors[Neighbors.Fitness>df.loc[str(Position)].Fitness]
+        #randomize order of neighobrs then loop until one exceeds
+        if len(BetterNeighbors)>0: #only update if there exists at least one superior neighobr
+            BetterNeighbors.sample(frac=1)
+            Position = BetterNeighbors.index.values[0] #return the first index value
+
+
+    return Position
+ 
+    
+"""
+Perturbation
+
+Given a position, perturb by some amount D
+
+"""
+def Perturbation(Position,D):
+    Position = np.array(list(str(Position)))
+
+    N=len(Position)
+    s = list(range(N))
+    random.shuffle(s)
+       #Take a step by picking a random gene to change
+    first_sample = s[-D:]
+    for i in first_sample:
+        Position[i] = abs(int(Position[i])-1)
+    return(''.join(Position))
+
+
+'''
+MARKOV CLUSTERING FUNCTIONS
+'''
+##first prepare a LON transition matrix dataframe
+def PrepLonMatrix(LON):
+    Transition_Matrix_New_Transpose=LON.transpose() #transpose
+    TNumpy = Transition_Matrix_New_Transpose.to_numpy() #to numpy
+    TNumpy = np.nan_to_num(TNumpy) #replace na
+    return(TNumpy)
+
+
+## Expansion Power
+EXPANSION_POWER = 2
+## Inflation power and number of iterations 
+# iterations really should not be preset and should be coded as stopping at convergence)
+INFLATION_POWER = 2
+#ITERATION_COUNT = 40
+def normalize(matrix):
+    return matrix/np.sum(matrix, axis=0)
+
+def expand(matrix, power):
+    return matrix**power
+
+def inflate(matrix, power):
+    for entry in np.nditer(matrix, op_flags=['readwrite']):
+        #print(entry)
+        entry[...] = entry**power
+        #print(entry)
+    return matrix
+
+def run(matrix):
+    matrix = PrepLonMatrix(matrix)
+    matrix = normalize(matrix)
+
+    OldMatrix = np.zeros((len(matrix),len(matrix)))
+    #keep looping until convergence
+    while ((matrix == OldMatrix).all())==False:
+        OldMatrix = matrix
+        matrix = normalize(inflate(expand(matrix, EXPANSION_POWER), INFLATION_POWER))
+        matrix = np.nan_to_num(matrix)
+        #print((OldMatrix-matrix).sum())
+    return matrix
 
 
 
@@ -236,11 +336,35 @@ A bunch of different ways for comparing landscapes or walks over them
 
 # Gets the autocorrelation of the series of fitnesses obtained from a random walk.
 def Get_AR(TimeData, lag_range):
-    #convert to time series
+    #convert to time series\
     s = pd.Series(TimeData)
 
     return [s.autocorr(lag=r) for r in range(lag_range)]
 
+
+"""
+
+Returns the dataframe with a column variable indicating (1) if the location is a local maxima
+"""
+
+def Local_Maxima_Locations(df):
+    #Set A Maxima counter
+    Num_Local_Max=0
+    df['Maxima']=0
+    #Loop over all rows
+    for idx, focal_row in df.iterrows():
+        #Identify the Neighbors (distance of 1 from focal row)
+        Neighbors = df[df['Location'].apply(lambda row : sum(abs(np.array(row)-np.array(focal_row.Location)))==1)]        #Get the maximum fitness value of the neighbors
+        Neighbors_Max = max(Neighbors.Fitness) #fitness is indexed at 0 here for some reason
+
+        ##See if the neighbors max does not exceed the focal max, if not then it is a local maxima
+        if Neighbors_Max < focal_row.Fitness: #fitness is indexed at 1 here for some reason
+            df.loc[idx,'Maxima'] = 1
+            #print('Local Maxima found')
+            Num_Local_Max += 1
+        #Append the focal row at the end
+    print(Num_Local_Max)
+    return df
 
 def Count_Local_Maxima(df):
     #Set A Maxima counter
