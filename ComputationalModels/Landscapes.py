@@ -27,7 +27,7 @@ make_layered() takes two landscapes and an argument specifying how to combine th
 """
 
 def make_NK_land(N, K):
-    return np.random.rand(N, 2**(K+1))
+    return Fitness_Mapping(np.random.rand(N, 2**(K+1)))
 
 
 def make_Dirichland(N,K, concentration_params, scalar=2):
@@ -63,14 +63,31 @@ def make_Dirichland(N,K, concentration_params, scalar=2):
     df.loc[:,'Location'] = all_permutations
     return df
 
-def sorted_NK_landscape(N,K):
-    df = Fitness_Mapping(make_NK_land(N,K))
-    df = df.sort_values(by="Fitness")
+
+
+def layer_landscapes(Landscape1, Landscape2, layering_mode="addition", weights=None):
+
+
+    if layering_mode == "average":
+        assert weights != None, "You need to provide weights for the average"
+        Landscape1.Fitness = ((Landscape1.Fitness*weights[0])+(Landscape2.Fitness*weights[1]))
+        return Landscape1
+
+    if layering_mode == "addition": #really for the Dirichlet landscape, which has a different mass
+        Landscape1.Fitness = Landscape1.Fitness + Landscape2.Fitness
+        return Landscape1
+
+    if layering_mode == "multiplication":
+        Landscape1.Fitness = (Landscape1.Fitness+.5) * (Landscape2.Fitness + .5)
+        return Landscape1
+
+def sorted_from_NK(landscape):
+    df = landscape.sort_values(by="Fitness")
     fitnesses = list(df.Fitness)
 
+    N = len(df.iloc[0]["Location"])
     hypercube = nx.hypercube_graph(N)
     chosen_peak = tuple((np.random.rand(N)>0.5).astype(int))
-    #sorted_landscape[chosen_peak] = fitnesses.pop() #last item is the largest remaining
 
     node_dict = nx.shortest_path_length(hypercube, chosen_peak)
     distance_dict = defaultdict(list)
@@ -81,29 +98,13 @@ def sorted_NK_landscape(N,K):
             max_dist = dist
 
     sorted_landscape = {}
-    for dist in range(dist):
+    sorted_landscape["".join([str(i) for i in chosen_peak])] = (fitnesses.pop(),chosen_peak)
+
+    for dist in range(1,max_dist+1): # node_dict has zero key...so weird IMHO
         for location in distance_dict[dist]:
             sorted_landscape["".join([str(i) for i in location])] = (fitnesses.pop(),location)
 
     return pd.DataFrame.from_dict(sorted_landscape,orient="index",columns=["Fitness","Location"])
-
-
-def layer_landscapes(Landscape1, Landscape2, layering_mode="addition", weights=None):
-
-
-    if layering_mode == "average":
-        assert weights != None, "You need to provide weights for the average"
-        Landscape1.Fitness = ((Landscape1.Fitness*weights[0])+(Landscape2.Fitness*weights[1]))/2.
-        return Landscape1
-
-    if layering_mode == "addition":
-        Landscape1.Fitness = Landscape1.Fitness + Landscape2.Fitness
-        return Landscape1
-
-    if layering_mode == "multiplication":
-        Landscape1.Fitness = (Landscape1.Fitness+.5) * (Landscape2.Fitness + .5)
-        return Landscape1
-
 
 """
 FITNESS EVALUATION FUNCTION
@@ -170,6 +171,7 @@ def random_walker(Steps, FitnessMap):
     currPosition = (np.random.rand(N)>0.5).astype(int)
 
     #Get first fitness value
+    #print(FitnessMap.loc["".join([str(i) for i in currPosition])])
     FitnessHistory=[FitnessMap.loc["".join([str(i) for i in currPosition])].Fitness]
     for j in range(Steps):
         #Take a step by picking a random gene to change
@@ -189,15 +191,42 @@ def landscape_as_graph(df):
     hypercube = nx.hypercube_graph(N)
 
     fitness_diff_dict = {}
+    fitness_dict = {}
     for focal_row in df.itertuples():
         source_fit = focal_row.Fitness
         Neighbors = df[df['Location'].apply(lambda row : sum(abs(np.array(row)-np.array(focal_row.Location)))==1)]
+        fitness_dict[focal_row.Location]= source_fit
         for neighbor in Neighbors.itertuples():
-            fitness_diff_dict[(focal_row.Location,neighbor.Location)] = abs(source_fit-neighbor.Fitness)
+            fitness_diff_dict[(focal_row.Location,neighbor.Location)] = (source_fit-neighbor.Fitness) #
 
+    nx.set_node_attributes(hypercube,fitness_dict, "fitness")
     nx.set_edge_attributes(hypercube, fitness_diff_dict,"fitness_difference")
 
     return hypercube
+
+def landscape_as_digraph(df):
+
+    N=len(df.iloc[0].name)
+    hypercube = nx.hypercube_graph(N)
+
+    digraph  = nx.DiGraph()
+    digraph.add_nodes_from(hypercube.nodes())
+
+    fitness_diff_dict = {}
+    fitness_dict = {}
+    for focal_row in df.itertuples():
+        source_fit = focal_row.Fitness
+        Neighbors = df[df['Location'].apply(lambda row : sum(abs(np.array(row)-np.array(focal_row.Location)))==1)]
+        fitness_dict[focal_row.Location]= source_fit
+        for neighbor in Neighbors.itertuples():
+            fitness_diff_dict[(focal_row.Location,neighbor.Location)] = 1+source_fit-neighbor.Fitness
+            fitness_diff_dict[(neighbor.Location,focal_row.Location)] = 1+neighbor.Fitness-source_fit
+
+    nx.set_node_attributes(digraph,fitness_dict, "fitness")
+    nx.set_edge_attributes(digraph, fitness_diff_dict,"fitness_difference")
+
+    return digraph
+
 
 """
 LANDSCAPE MEASUREMENTS
@@ -276,3 +305,39 @@ def Get_Landscape_Statistics(df,N,K):
     print("Distance btw min and max\t\t", Changes)
     print("Avg distance for 90th percentile to Max\t", Average_Distance_Percentile_90)
     print("Num of Local Maxima\t\t\t",Number_Maxima)
+
+def path_lengths(landscape,cutoff):
+
+    max_ind = landscape.iloc[:,0].idxmax()
+    max_loc = landscape.loc[max_ind].Location
+    max_fit = landscape.loc[max_ind].Fitness
+    min_ind = landscape.iloc[:,0].idxmin()
+    min_loc = landscape.loc[min_ind].Location
+    min_fit = landscape.loc[min_ind].Fitness
+    fit_diff = max_fit-min_fit
+
+    graph = landscape_as_graph(landscape)
+    fitness_by_edge = {}
+    for i, j, k in list(graph.edges.data()):
+        fit = k["fitness_difference"]
+        fitness_by_edge[(i,j)] = fit
+        fitness_by_edge[(j,i)] = fit
+    total_lengths = []
+    #cutoff = .5*len(list(graph.nodes()))
+    for path in nx.all_simple_paths(graph, max_loc, min_loc,cutoff=cutoff):
+        cum_len = 0
+        path_length = len(path)
+        for i in range(0,path_length-1):
+            cum_len += fitness_by_edge[(path[i],path[i+1])]
+        total_lengths.append(cum_len)
+    #print(fit_diff)
+    #print(total_lengths)
+    positive = sum([1 if i<=fit_diff else 0 for i in total_lengths])
+    #print(positive)
+
+    print("Difference btw min and max fitness", fit_diff)
+    print("Number of paths a weight equal to the difference (e.g. positive paths):",positive)
+    print("Percentage positive paths", positive/len(total_lengths))
+    plt.hist(total_lengths)
+    plt.show()
+    return total_lengths
