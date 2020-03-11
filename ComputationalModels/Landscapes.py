@@ -240,7 +240,7 @@ def inflate(matrix, power):
         #print(entry)
     return matrix
 
-def run(matrix):
+def Markov_Clustering(matrix):
     matrix = PrepLonMatrix(matrix)
     matrix = normalize(matrix)
 
