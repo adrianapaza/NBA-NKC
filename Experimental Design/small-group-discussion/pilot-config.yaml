@@ -1,0 +1,173 @@
+treatments:
+  - name: 3G
+    factorIds:
+      - PayMDkKNJwPkR6z9Q
+      - RH2eSSTMuhZwM9A69
+      - 8FzzX9b4mPvYkHRRY
+      - ciCJsFfHQ5G8homma
+      - tsunsMLsuonpraW3D
+      - J7h2RtakzeEqFPKek
+      - LGriGRtTWXW4GJzPA
+      - cHiLusm5BwnQHdibB
+      - XudmMYB7L3FypkMhy
+  - name: 3B
+    factorIds:
+      - PayMDkKNJwPkR6z9Q
+      - mAb8jjXpfuEguwqiF
+      - 8FzzX9b4mPvYkHRRY
+      - ciCJsFfHQ5G8homma
+      - tsunsMLsuonpraW3D
+      - J7h2RtakzeEqFPKek
+      - LGriGRtTWXW4GJzPA
+      - cHiLusm5BwnQHdibB
+      - XudmMYB7L3FypkMhy
+  - name: 2G1B
+    factorIds:
+      - PayMDkKNJwPkR6z9Q
+      - 9of4xcrkENgyKSB6z
+      - 8FzzX9b4mPvYkHRRY
+      - ciCJsFfHQ5G8homma
+      - tsunsMLsuonpraW3D
+      - J7h2RtakzeEqFPKek
+      - LGriGRtTWXW4GJzPA
+      - cHiLusm5BwnQHdibB
+      - XudmMYB7L3FypkMhy
+  - name: 1G2B
+    factorIds:
+      - PayMDkKNJwPkR6z9Q
+      - djDSzEWD8tNugcxNe
+      - 8FzzX9b4mPvYkHRRY
+      - ciCJsFfHQ5G8homma
+      - tsunsMLsuonpraW3D
+      - J7h2RtakzeEqFPKek
+      - LGriGRtTWXW4GJzPA
+      - cHiLusm5BwnQHdibB
+      - XudmMYB7L3FypkMhy
+factorTypes:
+  - _id: BLubxyPeArkiBxvwR
+    name: playerCount
+    description: The Number of players participating in the given game.
+    required: true
+    type: Integer
+    min: 1
+  - _id: QCjzY9XjvaATCLFd7
+    name: nGoodPerformers
+    description: The fraction of good performers in the group (0 = all bad; 1 = all good)
+    required: false
+    type: Number
+    min: 0
+    max: 1
+  - _id: u7QnpSQCJ9zbBHPyb
+    name: stageDuration
+    description: Specifies how many seconds for each decision stage
+    required: true
+    type: Number
+    min: 5
+    max: 300
+  - _id: BKQvXNNPFx5xsB6HE
+    name: nBlocks
+    description: >-
+      The number of times a participants will speak during one discussion (i.e.,
+      one round)
+    required: true
+    type: Integer
+    min: 1
+    max: 100
+  - _id: qvaemkY2dhuoGoRqj
+    name: firstSpeakerFixed
+    description: Whether to fix the first speaker across all round
+    required: false
+    type: Boolean
+  - _id: 9Xi8ojGYSDTgJTgFK
+    name: lastSpeakerFixed
+    description: Whether to fix the last speaker across all round
+    required: true
+    type: Boolean
+  - _id: osPRJDngGNRrXCWjy
+    name: nRounds
+    description: The number of rounds in the game (can't be more than the number of tasks)
+    required: true
+    type: Integer
+    min: 1
+    max: 20
+  - _id: hktwLRBkctetxpecZ
+    name: basePay
+    description: 'The amount for base pay (i.e., showing up and completing the experiment)'
+    required: true
+    type: Integer
+    min: 0
+    max: 10
+  - _id: 8xYtWoCJ3itp3JgP2
+    name: conversionRate
+    description: 'converting the game score to actual money (i.e., bonus)'
+    required: false
+    type: Number
+    min: 0
+    max: 100
+factors:
+  - _id: PayMDkKNJwPkR6z9Q
+    name: team
+    value: 3
+    factorTypeId: BLubxyPeArkiBxvwR
+  - _id: YG37iPiTPXbjopAny
+    name: solo
+    value: 1
+    factorTypeId: BLubxyPeArkiBxvwR
+  - _id: qqbXuLoNqARko3Qe4
+    name: 'true'
+    value: true
+    factorTypeId: qvaemkY2dhuoGoRqj
+  - _id: tsunsMLsuonpraW3D
+    name: 'false'
+    value: false
+    factorTypeId: qvaemkY2dhuoGoRqj
+  - _id: n5QcEs8tS5mwH7KME
+    name: 'true'
+    value: true
+    factorTypeId: 9Xi8ojGYSDTgJTgFK
+  - _id: J7h2RtakzeEqFPKek
+    name: 'false'
+    value: false
+    factorTypeId: 9Xi8ojGYSDTgJTgFK
+  - _id: RH2eSSTMuhZwM9A69
+    name: all_good
+    value: 1
+    factorTypeId: QCjzY9XjvaATCLFd7
+  - _id: mAb8jjXpfuEguwqiF
+    name: all_bad
+    value: 0
+    factorTypeId: QCjzY9XjvaATCLFd7
+  - _id: djDSzEWD8tNugcxNe
+    name: third_good
+    value: 0.33
+    factorTypeId: QCjzY9XjvaATCLFd7
+  - _id: 9of4xcrkENgyKSB6z
+    name: two_third_good
+    value: 0.66
+    factorTypeId: QCjzY9XjvaATCLFd7
+  - _id: 8FzzX9b4mPvYkHRRY
+    name: 15seconds
+    value: 15
+    factorTypeId: u7QnpSQCJ9zbBHPyb
+  - _id: ciCJsFfHQ5G8homma
+    name: '3'
+    value: 3
+    factorTypeId: BKQvXNNPFx5xsB6HE
+  - _id: LGriGRtTWXW4GJzPA
+    name: '20'
+    value: 20
+    factorTypeId: osPRJDngGNRrXCWjy
+  - _id: cHiLusm5BwnQHdibB
+    name: '2'
+    value: 2
+    factorTypeId: hktwLRBkctetxpecZ
+  - _id: XudmMYB7L3FypkMhy
+    name: '0.005'
+    value: 0.005
+    factorTypeId: 8xYtWoCJ3itp3JgP2
+lobbyConfigs:
+  - name: 10min
+    timeoutType: lobby
+    timeoutInSeconds: 600
+    timeoutStrategy: fail
+    gameLobbyIds: []
