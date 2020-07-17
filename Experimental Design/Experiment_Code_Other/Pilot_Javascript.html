@@ -5,7 +5,7 @@
 	<title>Pilot</title>
 
 </head>
-	<body 
+	<div
 	id='goy'
 	// onload ="
 	//draw_triangle_down(20,20);
@@ -20,7 +20,7 @@
 	draw_design(current_shapes);
 	display_interface([1,1,1,1,1,1,1,1,1,1]);
 	"getPositions();
-	
+
 	>
 		<canvas id="canvas" width="800" height="800"></canvas>
     <script type="text/javascript">
@@ -30,10 +30,10 @@
 		var ctx = canvas.getContext("2d");
 		ctx.fillStyle = "#FFFFFF";
 		ctx.fillRect(0,0,800,800);
-
     }
+
     </script>
-	</body>
+	</div>
 </html>
 
 <script>
@@ -214,7 +214,7 @@ function draw_square(cx,cy) {
 	//		alert('aaaa')
 	//	}
 	//}
-  
+
 }
 function draw_hollow_square(cx,cy) {
 
@@ -273,7 +273,7 @@ function draw_triangle_down(cx, cy) {
     }
 
 	ctx.closePath()
-  
+
 }
 
 function draw_triangle_up(cx,cy) {
@@ -285,7 +285,7 @@ function draw_triangle_up(cx,cy) {
     ctx.lineTo(x+25, y+25);
     ctx.fillStyle='green';
     ctx.fill();
-  
+
 }
 
 
