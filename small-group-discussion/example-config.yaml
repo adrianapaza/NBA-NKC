@@ -1,0 +1,173 @@
+treatments:
+  - name: solo_bad
+    factorIds:
+      - h2HH9tXBWjvxD9ybG
+      - BdvT3AsNeH3T8LdGX
+      - aHhByYWw3ruaK3TiG
+      - o9d9oFtcFd2XWJjjg
+      - 3C4vXcWFP5aqgWQvo
+      - anfTBjPFBKPPFTN5P
+      - ExNbZJmwHyknzPfac
+      - iToM7mpFAKMtNsfGy
+  - name: team_3G0B
+    factorIds:
+      - 8cYgPebstK8rtiK4X
+      - CLdCjgmSa2eAqkZoR
+      - N7wgraDwD8fWphZqC
+      - o9d9oFtcFd2XWJjjg
+      - anfTBjPFBKPPFTN5P
+      - 3C4vXcWFP5aqgWQvo
+      - ExNbZJmwHyknzPfac
+      - Lie6K4ZTr28nDtCv8
+  - name: solo_good
+    factorIds:
+      - h2HH9tXBWjvxD9ybG
+      - CLdCjgmSa2eAqkZoR
+      - N7wgraDwD8fWphZqC
+      - o9d9oFtcFd2XWJjjg
+      - 3C4vXcWFP5aqgWQvo
+      - anfTBjPFBKPPFTN5P
+      - ExNbZJmwHyknzPfac
+      - iToM7mpFAKMtNsfGy
+  - name: team_2G1B
+    factorIds:
+      - 8cYgPebstK8rtiK4X
+      - sDLbqKkSvt3oGEon6
+      - N7wgraDwD8fWphZqC
+      - o9d9oFtcFd2XWJjjg
+      - 3C4vXcWFP5aqgWQvo
+      - anfTBjPFBKPPFTN5P
+      - ExNbZJmwHyknzPfac
+      - iToM7mpFAKMtNsfGy
+factorTypes:
+  - _id: EBPXTqLjizeaFu2qE
+    name: playerCount
+    description: The Number of players participating in the given game.
+    required: true
+    type: Integer
+    min: 1
+  - _id: teWTxnREKoWmBpWEb
+    name: nGoodPerformers
+    description: The fraction of good performers in the group (0 = all bad; 1 = all good)
+    required: false
+    type: Number
+    min: 0
+    max: 1
+  - _id: PzYarSBh36EpY6k9Y
+    name: stageDuration
+    description: Specifies how many seconds for each decision stage
+    required: true
+    type: Integer
+    min: 4
+    max: 300
+  - _id: RrRbk95imEdNC4TDb
+    name: nBlocks
+    description: >-
+      The number of times a participants will speak during one discussion (i.e.,
+      one round)
+    required: false
+    type: Integer
+    min: 1
+    max: 100
+  - _id: ns4xoLFtxE93K28rE
+    name: firstSpeakerFixed
+    description: Whether to fix the first speaker across all round
+    required: false
+    type: Boolean
+  - _id: TCHSrpJdLTuyqvhhu
+    name: lastSpeakerFixed
+    description: Whether to fix the last speaker across all round
+    required: false
+    type: Boolean
+  - _id: zzwn9jKH9H4WuHDeD
+    name: nRounds
+    description: The number of rounds in the game (can't be more than the number of tasks)
+    required: true
+    type: Integer
+    min: 1
+    max: 20
+  - _id: 4j3QiZbjCjuvbKcPw
+    name: basePay
+    description: 'The amount for base pay (i.e., showing up and completing the experiment)'
+    required: false
+    type: Number
+    min: 0
+    max: 100
+factors:
+  - _id: h2HH9tXBWjvxD9ybG
+    name: solo
+    value: 1
+    factorTypeId: EBPXTqLjizeaFu2qE
+  - _id: 8cYgPebstK8rtiK4X
+    name: team
+    value: 3
+    factorTypeId: EBPXTqLjizeaFu2qE
+  - _id: 86wHzagEgBWjPGwus
+    name: 'true'
+    value: true
+    factorTypeId: ns4xoLFtxE93K28rE
+  - _id: 3C4vXcWFP5aqgWQvo
+    name: 'false'
+    value: false
+    factorTypeId: ns4xoLFtxE93K28rE
+  - _id: HpiM3EPB7HdPnfoQp
+    name: 'true'
+    value: true
+    factorTypeId: TCHSrpJdLTuyqvhhu
+  - _id: anfTBjPFBKPPFTN5P
+    name: 'false'
+    value: false
+    factorTypeId: TCHSrpJdLTuyqvhhu
+  - _id: BdvT3AsNeH3T8LdGX
+    name: all_bad
+    value: 0
+    factorTypeId: teWTxnREKoWmBpWEb
+  - _id: CLdCjgmSa2eAqkZoR
+    name: all_good
+    value: 1
+    factorTypeId: teWTxnREKoWmBpWEb
+  - _id: sDLbqKkSvt3oGEon6
+    name: third_good
+    value: 0.3
+    factorTypeId: teWTxnREKoWmBpWEb
+  - _id: Hpg9GpR8CMFgGhTEY
+    name: two_third_good
+    value: 0.66
+    factorTypeId: teWTxnREKoWmBpWEb
+  - _id: aHhByYWw3ruaK3TiG
+    name: 5s
+    value: 5
+    factorTypeId: PzYarSBh36EpY6k9Y
+  - _id: N7wgraDwD8fWphZqC
+    name: 10s
+    value: 10
+    factorTypeId: PzYarSBh36EpY6k9Y
+  - _id: 8Jt7hGQBocMPhKDxT
+    name: 15s
+    value: 15
+    factorTypeId: PzYarSBh36EpY6k9Y
+  - _id: o9d9oFtcFd2XWJjjg
+    name: 3_times
+    value: 3
+    factorTypeId: RrRbk95imEdNC4TDb
+  - _id: ExNbZJmwHyknzPfac
+    name: few
+    value: 5
+    factorTypeId: zzwn9jKH9H4WuHDeD
+  - _id: uy9u7L3i5EYhrXuWq
+    name: full
+    value: 15
+    factorTypeId: zzwn9jKH9H4WuHDeD
+  - _id: iToM7mpFAKMtNsfGy
+    name: none
+    value: 0
+    factorTypeId: 4j3QiZbjCjuvbKcPw
+  - _id: Lie6K4ZTr28nDtCv8
+    name: 1_dollar
+    value: 1
+    factorTypeId: 4j3QiZbjCjuvbKcPw
+lobbyConfigs:
+  - timeoutType: lobby
+    timeoutInSeconds: 300
+    timeoutStrategy: fail
+    gameLobbyIds: []

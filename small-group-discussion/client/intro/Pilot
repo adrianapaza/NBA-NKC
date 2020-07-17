@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+	<head>
+
+	<meta charset=utf-8 />
+	<title>Pilot</title>
+
+</head>
+	<body
+	id='goy'
+	// onload ="
+	//draw_triangle_down(20,20);
+	//draw_design(current_shapes);
+	display_interface([1,1,1,1,1,1,1,1,1,1]);
+	"
+	 onclick="
+	 clear_display();
+
+	//draw_triangle_down(20,20);
+	shape_toggling();
+	draw_design(current_shapes);
+	display_interface([1,1,1,1,1,1,1,1,1,1]);
+	"getPositions();
+
+	>
+		<canvas id="canvas" width="800" height="800"></canvas>
+    <script type="text/javascript">
+    	//this function clears the display by creating a new white canvas
+    function clear_display() {
+        var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+		ctx.fillStyle = "#FFFFFF";
+		ctx.fillRect(0,0,800,800);
+    }
+
+    </script>
+	</body>
+</html>
+
+<script>
+function clearBox(elementID)
+{
+    document.getElementById(elementID).innerHTML = "";
+}
+function showCoords(event) {
+  var x = event.clientX;
+  var y = event.clientY;
+  var coords = "X coords: " + x + ", Y coords: " + y;
+  document.getElementById("demo").innerHTML = coords;
+  draw_square(40,40)
+  current_shapes=[1,1,1,1,1,0,0,0,0,0]
+}
+
+//Create an up top interface where we draw the shapes displayed
+//just check if shape is toggled to display, then display it
+// input is an array of shapes
+
+var current_shapes=[1,0,0,1,0,0,0,0,0,0];
+function draw_design(clicked_shapes){
+	const x_center = 250;
+	const y_center = 100;
+	if (clicked_shapes[0]==1){
+		draw_square(x_center,y_center)
+	}
+	if (clicked_shapes[1]==1){
+		draw_hollow_square(x_center,y_center)
+	}
+	if (clicked_shapes[2]==1){
+		draw_circle(x_center+70,y_center-20)
+	}
+
+	if (clicked_shapes[4]==1){
+		draw_half_circle(x_center+70,y_center+70)
+	}
+	if (clicked_shapes[5]==1){
+		draw_triangle_down(x_center-29,y_center+70)
+	}
+	if (clicked_shapes[6]==1){
+		draw_triangle_up(x_center+70,y_center+20)
+	}
+	if (clicked_shapes[7]==1){
+		drawStar_type_1(x_center-10,y_center+25)
+	}
+	if (clicked_shapes[8]==1){
+		drawStar_type_2(x_center+25,y_center+80)
+	}
+	if (clicked_shapes[9]==1){
+		draw_diamond(x_center+25,y_center-5)
+	}
+	if (clicked_shapes[3]==1){
+		draw_hollow_circle(x_center-10,y_center+25)
+	}
+}
+
+function display_interface(shapes_toggle){
+
+
+	const x_center = 300;
+	const y_center = 300;
+
+	if (shapes_toggle[0]==1){
+		draw_square(x_center-225,y_center);
+	};
+	if (shapes_toggle[1]==1){
+		draw_hollow_square(x_center-125,y_center);
+	};
+	if (shapes_toggle[2]==1){
+		draw_circle(x_center+2,y_center+25);
+	};
+	if (shapes_toggle[3]==1){
+		draw_hollow_circle(x_center+100,y_center+25);
+	};
+	if (shapes_toggle[4]==1){
+		draw_half_circle(x_center+200,y_center+25);
+	};
+	if (shapes_toggle[5]==1){
+		draw_triangle_down(x_center-200,y_center+100);
+	};
+	if (shapes_toggle[6]==1){
+		draw_triangle_up(x_center-100,y_center+100);
+	};
+	if (shapes_toggle[7]==1){
+		drawStar_type_1(x_center,y_center+100);
+	};
+	if (shapes_toggle[8]==1){
+		drawStar_type_2(x_center+100,y_center+100);
+	};
+	if (shapes_toggle[9]==1){
+		draw_diamond(x_center+200,y_center+100);
+	};
+
+}
+
+
+//Define functions to detect where you click, and then toggle shape based upon the interface locations
+ //ENSURE 300 same as interface centers
+function shape_toggling(ev,x_interface=300,y_interface=300) {
+	if (ev == null) { ev = window.event }
+	   _mouseX = ev.clientX;
+	   _mouseY = ev.clientY;
+		//THESE Must be the same as the display interface
+		const x_center = x_interface;
+		const y_center = y_interface+30;
+	    X_width = 60
+	    Y_height = 60
+
+	    //first row of shapes
+	   if (_mouseY<(y_center+Y_height/2) &&_mouseY>(y_center-Y_height/2)){
+	   		if (_mouseX<(x_center-200+X_width/2) && _mouseX > (x_center-200-X_width/2)){
+	   			current_shapes[0]=Math.abs(current_shapes[0]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		 if (_mouseX<(x_center-100+X_width/2) && _mouseX > (x_center-100-X_width/2)){
+	   			current_shapes[1]=Math.abs(current_shapes[1]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		if (_mouseX<(x_center+X_width/2) && _mouseX > (x_center-X_width/2)){
+	   			current_shapes[2]=Math.abs(current_shapes[2]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		if (_mouseX<(x_center+100+X_width/2) && _mouseX > (x_center+100-X_width/2)){
+	   			current_shapes[3]=Math.abs(current_shapes[3]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		if (_mouseX<(x_center+200+X_width/2) && _mouseX > (x_center+200-X_width/2)){
+	   			current_shapes[4]=Math.abs(current_shapes[4]-1)
+	   			draw_design(current_shapes)
+	   		}
+
+	   }
+	   //Second row
+	   if (_mouseY<(y_center+80+Y_height/2) &&_mouseY>(y_center+80-Y_height/2)){
+	   		if (_mouseX<(x_center-200+X_width/2) && _mouseX > (x_center-200-X_width/2)){
+	   			current_shapes[5]=Math.abs(current_shapes[5]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		 if (_mouseX<(x_center-100+X_width/2) && _mouseX > (x_center-100-X_width/2)){
+	   			current_shapes[6]=Math.abs(current_shapes[6]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		if (_mouseX<(x_center+X_width/2) && _mouseX > (x_center-X_width/2)){
+	   			current_shapes[7]=Math.abs(current_shapes[7]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		if (_mouseX<(x_center+100+X_width/2) && _mouseX > (x_center+100-X_width/2)){
+	   			current_shapes[8]=Math.abs(current_shapes[8]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   		if (_mouseX<(x_center+200+X_width/2) && _mouseX > (x_center+200-X_width/2)){
+	   			current_shapes[9]=Math.abs(current_shapes[9]-1)
+	   			draw_design(current_shapes)
+	   		}
+	   }
+	//redraw design
+	draw_design(current_shapes)
+}
+
+
+
+
+
+//Shape drawing functions
+var cnv = document.getElementById('myCanvas')
+var deg = Math.PI/180
+var ctx = canvas.getContext('2d');
+function draw_square(cx,cy) {
+    var x = cx;
+    var y = cy;
+    ctx.fillStyle='#999900';
+    ctx.fillRect(cx,cy,50,50);
+    //context.clearRect(40,40,60,60);
+    //context.strokeRect(cx,cy,50,50);
+	//if (event!=null){
+	//	if (IsInPath(event)){
+	//		alert('aaaa')
+	//	}
+	//}
+
+}
+function draw_hollow_square(cx,cy) {
+
+    var context = canvas.getContext('2d');
+    var x = cx;
+    var y = cy;
+	context.strokeStyle='blue'
+    context.strokeRect(cx,cy,50,50);
+  }
+
+function draw_circle(cx,cy) {
+	ctx.beginPath();
+	ctx.arc(cx, cy, 25, 0, 2 * Math.PI);
+	ctx.closePath()
+	ctx.fillStyle='#ff99ff';
+	ctx.fill();
+	this.clicked=function(){
+      ctx.fillStyle='#ff0000'
+      ctx.fill();
+      alert('clicked shape')
+    }
+}
+
+function draw_hollow_circle(cx,cy) {
+	ctx.beginPath();
+	ctx.arc(cx, cy, 25, 0, 2 * Math.PI);
+	ctx.closePath()
+	ctx.strokeStyle='orange'
+	ctx.stroke();
+
+}
+
+function draw_half_circle(cx,cy) {
+	ctx.beginPath();
+	ctx.arc(cx, cy, 25, 9.4, 2 * Math.PI);
+	ctx.fillStyle='black';
+	ctx.fill();
+	ctx.closePath();
+
+}
+
+function draw_triangle_down(cx, cy) {
+    var x = cx;
+    var y = cy;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y+25);
+    ctx.lineTo(x-25, y-25);
+    ctx.lineTo(x+25, y-25);
+    ctx.fillStyle='purple';
+    ctx.fill();
+    ctx.closePath();
+    this.clicked=function(){
+      ctx.fillStyle='#ff0000'
+      ctx.fill();
+    }
+
+	ctx.closePath()
+
+}
+
+function draw_triangle_up(cx,cy) {
+	var x = cx;
+    var y = cy;
+    ctx.beginPath();
+    ctx.moveTo(x, y - 25);
+    ctx.lineTo(x-25, y+25);
+    ctx.lineTo(x+25, y+25);
+    ctx.fillStyle='green';
+    ctx.fill();
+
+}
+
+
+
+function drawStar_type_1(cx,cy){
+      //var ctx=canvas.getContext("2d");
+      var rot=Math.PI/2*3;
+      var x=cx;
+      var y=cy;
+      var spikes = 5;
+      var outerRadius = 30;
+      var innerRadius = 15;
+      var step=Math.PI/spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx,cy-outerRadius)
+      for(i=0;i<spikes;i++){
+        x=cx+Math.cos(rot)*outerRadius;
+        y=cy+Math.sin(rot)*outerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+
+        x=cx+Math.cos(rot)*innerRadius;
+        y=cy+Math.sin(rot)*innerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+      }
+      ctx.lineTo(cx,cy-outerRadius);
+      ctx.closePath();
+      ctx.lineWidth=5;
+      ctx.strokeStyle='blue';
+      //ctx.stroke();
+      ctx.fillStyle='skyblue';
+      ctx.fill();
+    }
+function drawStar_type_2(cx,cy){
+      var rot=Math.PI/2*3;
+      var x=cx;
+      var y=cy;
+      var spikes = 10;
+      var outerRadius = 30;
+      var innerRadius = 10;
+      var step=Math.PI/spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx,cy-outerRadius)
+      for(i=0;i<spikes;i++){
+        x=cx+Math.cos(rot)*outerRadius;
+        y=cy+Math.sin(rot)*outerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+
+        x=cx+Math.cos(rot)*innerRadius;
+        y=cy+Math.sin(rot)*innerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+      }
+      ctx.lineTo(cx,cy-outerRadius);
+      ctx.closePath();
+      ctx.lineWidth=5;
+      ctx.strokeStyle='blue';
+      //ctx.stroke();
+      ctx.fillStyle='red';
+      ctx.fill();
+    }
+
+function draw_diamond(cx,cy){
+      var rot=Math.PI/2*3;
+      var x=cx;
+      var y=cy;
+      var spikes = 2;
+      var outerRadius = 30;
+      var innerRadius = 10;
+      var step=Math.PI/spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx,cy-outerRadius)
+      for(i=0;i<spikes;i++){
+        x=cx+Math.cos(rot)*outerRadius;
+        y=cy+Math.sin(rot)*outerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+
+        x=cx+Math.cos(rot)*innerRadius;
+        y=cy+Math.sin(rot)*innerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+      }
+      ctx.lineTo(cx,cy-outerRadius);
+      ctx.closePath();
+      ctx.lineWidth=5;
+      ctx.strokeStyle='blue';
+      //ctx.stroke();
+      ctx.fillStyle='red';
+      ctx.fill();
+    }
+
+function IsInPath(event) {
+	var bb, x, y
+	bb = cnv.getBoundingClientRect()
+	x = (event.clientX-bb.left) * (cnv.width/bb.width)
+	y = (event.clientY-bb.top) * (cnv.height/bb.height)
+	return ctx.isPointInPath(x,y)
+}
+
+</script>
