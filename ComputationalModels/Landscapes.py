@@ -26,8 +26,15 @@ make_layered() takes two landscapes and an argument specifying how to combine th
 
 """
 
+def Position_rand(N):
+    Pos = (np.random.rand(N)>0.5).astype(int)
+    Pos = Pos.astype(int)
+    return(Pos)
+
 def make_NK_land(N, K):
     return Fitness_Mapping(np.random.rand(N, 2**(K+1)))
+
+
 
 
 def make_Dirichland(N,K, concentration_params, scalar=2):
