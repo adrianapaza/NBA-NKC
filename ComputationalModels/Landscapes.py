@@ -183,7 +183,9 @@ def Hill_Climb_To_Max(Position,df, M):
 
 def Hill_Climb_First(Position,df, M):
         #Loops until you reach a maxima
-    while df.loc[str(Position)].Maxima==0:
+    #loop until no better neighbors
+    num_better_neighbors = 0
+    while num_better_neighbors>0:
 
         #Identify the Neighbors (distance of M from initial position row)
         Neighbors = df[df['Location'].apply(lambda row : sum(abs(np.array(row)-np.array(df.loc[str(Position)].Location)))==M)]        #Get the maximum fitness value of the neighbors
@@ -193,7 +195,7 @@ def Hill_Climb_First(Position,df, M):
         if len(BetterNeighbors)>0: #only update if there exists at least one superior neighobr
             BetterNeighbors.sample(frac=1)
             Position = BetterNeighbors.index.values[0] #return the first index value
-
+        num_better_neighbors=len(BetterNeighbors)
 
     return Position
  
