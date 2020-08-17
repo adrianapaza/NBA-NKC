@@ -394,7 +394,7 @@ def Count_Local_Maxima(df):
 
 
 
-def Get_Landscape_Statistics(df,N,K):
+def Get_Landscape_Statistics(df,N,K,mycolor="b"):
 
 
     ##Record the autocorrelation of a random walk
@@ -427,10 +427,10 @@ def Get_Landscape_Statistics(df,N,K):
     ##Now Identify the Number of Maxima
     Number_Maxima = Count_Local_Maxima(df)
 
-    plt.figure(figsize=(5,2))
+    plt.figure(figsize=(10,4))
     plt.title("Auto-correlation by step distance, N={} K={}".format(N,K),size=24)
     plt.grid()
-    plt.plot(AR,color="g")
+    plt.plot(AR,color=mycolor)
     plt.show()
     print("Max Fitness\t\t\t\t", MaximalFitness)
     print("Min Fitness\t\t\t\t", MinimalFitness)
